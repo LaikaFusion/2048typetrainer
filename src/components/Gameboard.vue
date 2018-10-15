@@ -7,7 +7,7 @@
     <div class="keyStyle">{{selectedKeys[1]}}</div>    
     <div :style="style" class="gameboard">
       <div v-for="(cell,index) in grid" :key=index>
-        {{cell}}
+        <Tile  v-bind:number=cell />
       </div>
     </div>
     <div class="keyStyle">{{selectedKeys[2]}}</div>    
@@ -20,12 +20,20 @@
 </template>
 
 <script>
+
+import Tile from "./Tile.vue";
+
+
 export default {
   name: "Gameboard",
+  components: {
+    Tile
+  },
   props: {
     gridsize: Number,
     grid: Array,
-    selectedKeys: Array
+    selectedKeys: Array,
+    winVal:Number
   },
   computed: {
     style() {

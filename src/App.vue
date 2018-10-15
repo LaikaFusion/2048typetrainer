@@ -2,7 +2,7 @@
   <div id="app">
     <Title/>
     Score:{{score}}
-    <Gameboard :selectedKeys=selectedKeys :grid=grid :gridsize=gridsize />
+    <Gameboard :winVal=winVal :selectedKeys=selectedKeys :grid=grid :gridsize=gridsize />
   </div>
 </template>
 
