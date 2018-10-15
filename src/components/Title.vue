@@ -1,11 +1,12 @@
 <template>
 <div class="title">
   <div class="titleTop">
-    2048
-  </div>
-  <div class="subTitle">
+    2048:
+
+  <span class="subTitle">
     Symbol Typing Trainer
-  </div>
+  </span>
+    </div>
 </div>
 </template>
 
@@ -19,5 +20,10 @@ export default {
 <style scoped>
 .titleTop{
   font-size:64px
+  
+}
+.subTitle{
+  font-size: 30px;
+  vertical-align: middle;
 }
 </style>

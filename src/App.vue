@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <Title/>
-    Score:{{score}}
-    <Gameboard :winVal=winVal :selectedKeys=selectedKeys :grid=grid :gridsize=gridsize />
+    <Gameboard @newgame="newGame" :score=score :winPow=winPow :pieceVal=pieceVal :selectedKeys=selectedKeys :grid=grid :gridsize=gridsize />
   </div>
 </template>
 
@@ -22,7 +21,7 @@ export default {
       grid: [],
       direction: "",
       score: 0,
-      winVal: 2048,
+      winPow: 11,
       pieceVal: 2,
       gameOver: false,
       validKeys: "|`~-_=+{[]};:',<>/\\".split(''),
@@ -51,6 +50,8 @@ export default {
       this.direction = "";
       this.score = 0;
       this.gameOver = false;
+      this.validKeys= "|`~-_=+{[]};:',<>/\\".split(''),
+      this.selectedKeys=[];
       this.selectKeys();
       this.generateRandomSpot();
       this.generateRandomSpot();
@@ -62,11 +63,11 @@ export default {
         .filter(Number);
       const randomItem =
         emptySpots[Math.floor(Math.random() * emptySpots.length)];
-      this.grid[randomItem] = Math.random() < 0.9 ? this.pieceVal : (this.pieceVal * 2);
+      this.grid[randomItem] = Math.random() < 0.9 ? 1 : 2;
       }
      
     },
-    movement: function() {
+    movement: function(key) {
       let newArray = []
       if(this.direction==="left"||this.direction==="right"){for (let i = 0; i < (this.gridsize); i++) {
 
@@ -103,6 +104,8 @@ export default {
       if(this.grid.toString() !== newArray.toString()){
         this.grid = newArray;
         this.generateRandomSpot();
+        this.selectKeys(key)
+
       }
 
       this.gameEndCheck()
@@ -111,10 +114,12 @@ export default {
       if(!this.containsZeros() && !this.containsMatchs()){
         this.gameOver = true;
         console.log("Lose");
+        return;
       }
-      if(this.grid.includes(2048)){
+      if(this.grid.includes(this.winPow)){
         this.gameOver = true;
         console.log("Win")
+        return;
       }
     },
     containsZeros: function(){
@@ -151,11 +156,11 @@ export default {
     }while(movesLeft)
     rowArr.forEach((e,i)=>{
       if(i!==0){
-        if(rowArr[i-1]===e){
-          rowArr[i - 1] += e;
+        if(rowArr[i-1]===e&&e!==0){
+          rowArr[i - 1] += 1;
           rowArr.splice(i,1)
           rowArr.push(0)
-          this.score +=e
+          this.score +=Math.pow(2,e)*(.5*this.pieceVal)
         }
       }
     })
@@ -168,35 +173,47 @@ export default {
   },
   mounted() {
     window.addEventListener("keydown", e => {
-      if(e.key===this.selectedKeys[0]){
+      // if(e.key===this.selectedKeys[0]){
+      //   this.direction = "up";
+      // }
+      // else if (e.key===this.selectedKeys[1]){
+      //   this.direction = "down";
+      // }
+      // else if (e.key ===this.selectedKeys[2]){
+      //   this.direction = "right";      
+      // }
+      // else if (e.key === this.selectedKeys[3]){
+      //   this.direction = "left";
+      // }
+            if(e.key==="w"){
         this.direction = "up";
       }
-      else if (e.key===this.selectedKeys[1]){
+      else if (e.key==="s"){
         this.direction = "down";
       }
-      else if (e.key ===this.selectedKeys[2]){
+      else if (e.key ==="d"){
         this.direction = "right";      
       }
-      else if (e.key === this.selectedKeys[3]){
+      else if (e.key === "a"){
         this.direction = "left";
       }
       else{
         return;
       }
-      console.log(this.selectedKeys);
-      this.movement()
-      this.selectKeys(e.key)
+      this.movement(e.key)
     });
   },
 };
 </script>
 
 <style>
+html{
+  background-color:lightgray;
+}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
 }
 </style>

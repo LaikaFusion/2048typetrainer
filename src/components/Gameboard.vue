@@ -1,19 +1,23 @@
 <template>
 <div class="gameArea">
-  <div class="topRow">
+  <div class="row">
+    <div class="score">Score:{{score}}</div>
     <div class="keyStyle">{{selectedKeys[0]}}</div>
+    <div v-on:click="$emit('newgame')" class="newGameButton">New Game</div>
   </div>
-  <div class= "middleRow">
-    <div class="keyStyle">{{selectedKeys[1]}}</div>    
+  <div class= "row">
+    <div class="keyStyle">{{selectedKeys[3]}}</div>    
     <div :style="style" class="gameboard">
       <div v-for="(cell,index) in grid" :key=index>
-        <Tile  v-bind:number=cell />
+        <Tile :pieceVal=pieceVal :winPow=winPow v-bind:number=cell />
       </div>
     </div>
     <div class="keyStyle">{{selectedKeys[2]}}</div>    
   </div>
-   <div class="bottomRow">
-    <div class="keyStyle">{{selectedKeys[3]}}</div>
+   <div class="row">
+     <div class="hiddenDiv"> </div>
+    <div class="keyStyle">{{selectedKeys[1]}}</div>
+    <div class="hiddenDiv"> </div>
   </div>
 </div>
 
@@ -33,7 +37,9 @@ export default {
     gridsize: Number,
     grid: Array,
     selectedKeys: Array,
-    winVal:Number
+    winPow:Number,
+    pieceVal:Number,
+    score:Number
   },
   computed: {
     style() {
@@ -55,13 +61,43 @@ export default {
   width: 600px;
   grid-gap: 2%;
   padding: 2%;
+  border-radius: 6px;
 }
-.middleRow{
+.row{
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  width: 70%;
+  margin: auto;
+
 }
 .keyStyle{
   margin: 10px;
+  font-size: 40px;
+  background-color: white;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 20px grey solid;
+  border-radius: 6px;
+}
+.score{
+  width: 150px;
+  font-size: 30px;
+}
+.newGameButton{
+  font-size:30px;
+  background-color: black;
+  width: 150px;
+  border: 10px grey solid;
+  border-radius: 6px;
+  color:white;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.hiddenDiv{
+  width:150px
 }
 </style>
